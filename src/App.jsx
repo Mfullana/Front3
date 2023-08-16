@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import TaskForm from "./components/taskForm/TaskForm";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+import TaskList from "./components/taskList/TaskList";
+import { task as data } from "./helpers/tasks";
+import { useForm } from "./hooks/useForm";
+import { validate } from "./helpers/validate";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([]);
+  const [message, setMessage] = useState("");
+  const { form, changed } = useForm({});
+
+  useEffect(() => {
+    setTasks(data);
+  }, []);
+
+  const createTask = (task) => {
+    const { title, description } = task;
+    const msg = validate(title, description);
+
+    if (msg.type === "Error") {
+      return setMessage(msg.body.message);
+    }
+
+    setTasks([
+      ...tasks,
+      {
+        id: tasks.length,
+        title,
+        description,
+      },
+    ]);
+  };
+
+  const deleteTask = (taskId) => {
+    const res = confirm("Si presionas el boton OK se ELIMINARA la tarea?");
+    res ? setTasks(tasks.filter((task) => task.id != taskId)) : null;
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header />
+      <main className="main">
+        <TaskList tasks={tasks} deleteTask={deleteTask} />
+        <section>
+          <TaskForm
+            form={form}
+            changed={changed}
+            createTask={createTask}
+            message={message}
+          />
+        </section>
+      </main>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
