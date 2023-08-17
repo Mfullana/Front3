@@ -13,16 +13,16 @@
     margin: 0 auto;
 }
 
-/* .form h5 {
+.form h5 {
     text-align: center;
     color: #f00;
     margin-top: 8px;
-} */
+}
 
 .container_input_form {
     display: flex;
     flex-direction: column;
-    margin: 10px 0 10px 0;
+    margin: 5px 0 5px 0;
 }
 
 .container_input_form input, .container_input_form textarea {
@@ -45,9 +45,9 @@
     margin-left: 12px;
 }
 
-/* .container_input_form input::placeholder, .container_input_form textarea::placeholder {
+.container_input_form input::placeholder, .container_input_form textarea::placeholder {
     outline: 1px solid #fff;
-} */
+}
 
 .container_input_form label {
     position: relative;
